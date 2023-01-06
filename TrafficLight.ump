@@ -1,0 +1,217 @@
+namespace trafficsim.core;
+
+external interface EventHandler {}
+
+class TrafficLight {
+  isA EventHandler;
+
+  TrafficLightManager trafficLightManager;
+
+  after constructor {
+    trafficLightManager.addEventHandler(this);
+  }
+
+  status {
+
+  	defaultMode {
+  		northAndSouthGreen {
+  			entry / { trafficLightManager.northGreen(); }
+  			entry / { trafficLightManager.southGreen(); }
+  			entry / { trafficLightManager.westRed(); }
+  			entry / { trafficLightManager.eastRed(); }
+  			timerGreen() -> defaultMode.northAndSouthYellow;
+  		}
+
+  		northAndSouthYellow {
+  			entry / { trafficLightManager.northYellow(); }
+  			entry / { trafficLightManager.southYellow(); }
+  			entry / { trafficLightManager.westRed(); }
+  			entry / { trafficLightManager.eastRed(); }
+  			timerYellow() -> defaultMode.northAndSouthRed;
+  		}
+
+  		northAndSouthRed {
+  			entry / { trafficLightManager.northRed(); }
+  			entry / { trafficLightManager.southRed(); }
+  			entry / { trafficLightManager.westGreen(); }
+  			entry / { trafficLightManager.eastGreen(); }
+  			timerGreen() -> defaultMode.westAndEastYellow;
+  		}
+
+  		westAndEastYellow{
+  			entry / { trafficLightManager.northRed(); }
+  			entry / { trafficLightManager.southRed(); }
+  			entry / { trafficLightManager.westYellow(); }
+  			entry / { trafficLightManager.eastYellow(); }
+  			timerYellow() -> defaultMode.northAndSouthGreen;
+  		}
+
+  		lowTraffic() -> lowTraffic;
+  		moderateTraffic() -> moderateTraffic;
+  		highTraffic() -> highTraffic;
+  	}
+
+	  lowTraffic{
+  		northAndSouthArrow {
+  			entry / { trafficLightManager.northArrow(); }
+  			entry / { trafficLightManager.southArrow(); }
+  			entry / { trafficLightManager.westRed(); }
+  			entry / { trafficLightManager.eastRed(); }
+  			timerGreen() -> lowTraffic.northAndSouthGreen;
+  		}
+
+  		northAndSouthGreen {
+  			entry / { trafficLightManager.northGreen(); }
+  			entry / { trafficLightManager.southGreen(); }
+  			entry / { trafficLightManager.westRed(); }
+  			entry / { trafficLightManager.eastRed(); }
+  			timerGreen() -> lowTraffic.northAndSouthYellow;
+  		}
+
+  		northAndSouthYellow {
+  			entry / { trafficLightManager.northYellow(); }
+  			entry / { trafficLightManager.southYellow(); }
+  			entry / { trafficLightManager.westRed(); }
+  			entry / { trafficLightManager.eastRed(); }
+  			timerYellow() -> lowTraffic.westAndEastGreen;
+  		}
+
+  		westAndEastGreen {
+  			entry / { trafficLightManager.northRed(); }
+  			entry / { trafficLightManager.southRed(); }
+  			entry / { trafficLightManager.westGreen(); }
+  			entry / { trafficLightManager.eastGreen(); }
+  			timerGreen() -> lowTraffic.westAndEastYellow;
+  		}
+
+  		westAndEastYellow{
+  			entry / { trafficLightManager.northRed(); }
+  			entry / { trafficLightManager.southRed(); }
+  			entry / { trafficLightManager.westYellow(); }
+  			entry / { trafficLightManager.eastYellow(); }
+  			timerYellow() -> lowTraffic.northAndSouthArrow;
+  		}
+
+  		defaultMode() -> defaultMode;
+  		moderateTraffic() -> moderateTraffic;
+  		highTraffic() -> highTraffic;
+    }
+
+	  moderateTraffic{
+		  northGreenAndArrow {
+  			entry / { trafficLightManager.northGreenAndArrow(); }
+  			entry / { trafficLightManager.southRed(); }
+  			entry / { trafficLightManager.westRed(); }
+  			entry / { trafficLightManager.eastRed(); }
+  			timerGreen() -> moderateTraffic.northYellow;
+  		}
+
+  		northYellow {
+  			entry / { trafficLightManager.northYellow(); }
+  			entry / { trafficLightManager.southRed(); }
+  			entry / { trafficLightManager.westRed(); }
+  			entry / { trafficLightManager.eastRed(); }
+  			timerYellow() -> moderateTraffic.southGreenAndArrow;
+  		}
+
+  		southGreenAndArrow {
+  			entry / { trafficLightManager.northRed(); }
+  			entry / { trafficLightManager.southGreenAndArrow(); }
+  			entry / { trafficLightManager.westRed(); }
+  			entry / { trafficLightManager.eastRed(); }
+  			timerGreen() -> moderateTraffic.southYellow;
+  		}
+
+  		southYellow {
+  			entry / { trafficLightManager.northRed(); }
+  			entry / { trafficLightManager.southYellow(); }
+  			entry / { trafficLightManager.westRed(); }
+  			entry / { trafficLightManager.eastRed(); }
+  			timerYellow() -> moderateTraffic.westAndEastGreen;
+  		}
+
+  		westAndEastGreen{
+  			entry / { trafficLightManager.northRed(); }
+  			entry / { trafficLightManager.southRed(); }
+  			entry / { trafficLightManager.westGreen(); }
+  			entry / { trafficLightManager.eastGreen(); }
+  			timerGreen() -> moderateTraffic.westAndEastYellow;
+  		}
+
+  		westAndEastYellow{
+  			entry / { trafficLightManager.northRed(); }
+  			entry / { trafficLightManager.southRed(); }
+  			entry / { trafficLightManager.westYellow(); }
+  			entry / { trafficLightManager.eastYellow(); }
+  			timerYellow() -> moderateTraffic.northGreenAndArrow;
+  		}
+
+  		defaultMode() -> defaultMode;
+      lowTraffic() -> lowTraffic;
+  		highTraffic() -> highTraffic;
+  	}
+
+  	highTraffic{
+  		northGreenAndArrow {
+  			entry / { trafficLightManager.northGreenAndArrow(); }
+  			entry / { trafficLightManager.southRed(); }
+  			entry / { trafficLightManager.westRed(); }
+  			entry / { trafficLightManager.eastRed(); }
+  			timerGreen() -> highTraffic.northYellow;
+  		}
+
+  		northYellow {
+  			entry / { trafficLightManager.northYellow(); }
+  			entry / { trafficLightManager.southRed(); }
+  			entry / { trafficLightManager.westRed(); }
+  			entry / { trafficLightManager.eastRed(); }
+  			timerYellow() -> highTraffic.southGreenAndArrow;
+  		}
+
+  		southGreenAndArrow {
+  			entry / { trafficLightManager.northRed(); }
+  			entry / { trafficLightManager.southGreenAndArrow(); }
+  			entry / { trafficLightManager.westRed(); }
+  			entry / { trafficLightManager.eastRed(); }
+  			timerGreen() -> highTraffic.southYellow;
+  		}
+
+  		southYellow {
+  			entry / { trafficLightManager.northRed(); }
+  			entry / { trafficLightManager.southYellow(); }
+  			entry / { trafficLightManager.westRed(); }
+  			entry / { trafficLightManager.eastRed(); }
+
+  			timerYellow() -> highTraffic.westGreenAndArrow;
+  		}
+
+  		westGreenAndArrow{
+  			entry / { trafficLightManager.northRed(); }
+  			entry / { trafficLightManager.southRed(); }
+  			entry / { trafficLightManager.westGreenAndArrow(); }
+  			entry / { trafficLightManager.eastRed(); }
+  			timerGreen() -> highTraffic.westAndEastGreen;
+  		}
+
+  		westAndEastGreen{
+  			entry / { trafficLightManager.northRed(); }
+  			entry / { trafficLightManager.southRed(); }
+  			entry / { trafficLightManager.westGreen(); }
+  			entry / { trafficLightManager.eastGreen(); }
+  			timerGreen() -> highTraffic.westAndEastYellow;
+  		}
+
+  		westAndEastYellow{
+  			entry / { trafficLightManager.northRed(); }
+  			entry / { trafficLightManager.southRed(); }
+  			entry / { trafficLightManager.westYellow(); }
+  			entry / { trafficLightManager.eastYellow(); }
+  			timerYellow() -> highTraffic.northGreenAndArrow;
+  		}
+
+      defaultMode() -> defaultMode;
+  	  lowTraffic() -> lowTraffic;
+      moderateTraffic() -> moderateTraffic;
+  	}
+  }
+}

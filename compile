@@ -1,0 +1,9 @@
+#!/bin/bash
+#
+# Look for all the java files
+# and then compile them on Linux / Mac.
+
+java -jar umple.jar TrafficLight.ump
+java -jar umple.jar TrafficLight.ump -g GvStateDiagram
+find . -name "*.java" > sources.txt
+javac @sources.txt
